@@ -1,2 +1,2 @@
-select *
-from Utente;
+select sum(Numero_Commenti)
+from Post;

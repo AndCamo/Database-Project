@@ -9,11 +9,5 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
         SocialNetworkManager socialManager = new SocialNetworkManager();
-
-        List<Utente> utenteList = socialManager.getUtenti();
-
-        for (Utente tmpUtente : utenteList){
-            System.out.println(tmpUtente);
-        }
     }
 }

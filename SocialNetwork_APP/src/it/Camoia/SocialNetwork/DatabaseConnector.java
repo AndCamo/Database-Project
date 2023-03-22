@@ -31,9 +31,19 @@ public class DatabaseConnector {
         return resultSet;
     }
 
-    public final void insertValues(String query) throws SQLException {
+    public final void insertValues(Utente newUtente) throws SQLException {
+        String query = "INSERT INTO Utente VALUES " + "(" +
+                '"' + newUtente.getUsername() + '"' + ',' + '"' + newUtente.getPassword() + '"' + ',' + '"' + newUtente.geteMail() + '"' + ','
+                + '"' + newUtente.getNome() + '"' + ',' + '"' + newUtente.getCognome() + '"' + ','
+                + '"' + newUtente.getDataDiNascita() + '"' + ',' + '"' + newUtente.getNazione() + '"' + ");";
         stmt.execute(query);
-        System.out.println("QUERY ESEGUITA");
+        System.out.println("INSERIMENTO ESEGUITA"); //Stampa di controllo
+    }
+
+    public final void removeValues(String username, String table) throws SQLException {
+        String query = "DELETE FROM " + table + " WHERE Username = \"" + username + "\";";
+        stmt.execute(query);
+        System.out.println("RIMOZIONE ESEGUITA"); //Stampa di controllo
     }
 
     public void closeConnection(){

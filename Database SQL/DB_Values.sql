@@ -1,7 +1,7 @@
 INSERT INTO Utente(Username, Access_Key, eMail, Nome, Cognome, Data_Di_Nascita, Nazionalita) VALUES 
 	("AndCamo","4ndr34@C","andreacamo@gmail.com","Andrea","Camoia","2002-06-10","Italia"),
 	("FiloImbr","3conomia@l0ve","imbrifilo@gmail.com","Filomena","Imbriano","2001-02-05","Italia"),
-	("PasqFravekator","1846OnlyL0ve","gennaroambrosio@gmail.com","Gennaro","Ambrosio","2003-02-06","Italia"),
+	("PasqFravekator","1846OnlyL0ve","g.ambrosio@gmail.com","Gennaro","Ambrosio","2003-02-06","Italia"),
 	("TeoGrauso","querty1!","teo_grauso@gmail.com","Teodoro","Grauso","2001-12-10","Italia"),
 	("jane_smith","hjo38659jlkds","jane_smith@email.com","Jane","Smith","1985-03-15","Canada"),
 	("mario_rossi","psu19457gjleu","mario_rossi@email.com","Mario","Rossi","1995-12-05","Italia"),

@@ -11,5 +11,6 @@ public class SocialNetworkGUI {
         SocialNetworkFrame frame = new SocialNetworkFrame();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
     }
 }

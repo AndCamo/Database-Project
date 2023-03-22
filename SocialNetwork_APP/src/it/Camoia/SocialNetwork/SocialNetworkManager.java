@@ -1,6 +1,7 @@
 package it.Camoia.SocialNetwork;
 
 import it.Camoia.SocialNetwork.Entity.Utente;
+import it.Camoia.SocialNetwork.Exception.BadUtenteException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +29,6 @@ public class SocialNetworkManager {
             password = resultSet.getString("Access_Key");
             dataDiNascita = resultSet.getString("Data_Di_Nascita");
             Utente tmpUtente = new Utente(username, nome, cognome, eMail, password, nazione, dataDiNascita);
-
             listUtenti.add(tmpUtente);
         }
 
@@ -37,17 +37,19 @@ public class SocialNetworkManager {
         return listUtenti;
     }
 
-    public void insertUtente(Utente newUtente) throws SQLException {
+    public void insertUtente(Utente newUtente) throws SQLException, BadUtenteException {
         dbConnector.startConnection();
-        String query = "INSERT INTO Utente VALUES " + "(" +
-                '"' + newUtente.getUsername() + '"' + ',' + '"' + newUtente.getPassword() + '"' + ',' + '"' + newUtente.geteMail() + '"' + ','
-                + '"' + newUtente.getNome() + '"' + ',' + '"' + newUtente.getCognome() + '"' + ','
-                + '"' + newUtente.getDataDiNascita() + '"' + ',' + '"' + newUtente.getNazione() + '"' + ");";
+        if (newUtente.checkUtente()) {
+            dbConnector.insertValues(newUtente);
+        } else {
+            throw new BadUtenteException();
+        }
+        dbConnector.closeConnection();
+    }
 
-
-        System.out.println(query);
-        dbConnector.insertValues(query);
-
+    public void removeUtente(String username) throws SQLException {
+        dbConnector.startConnection();
+        dbConnector.removeValues(username, "Utente");
         dbConnector.closeConnection();
     }
 

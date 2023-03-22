@@ -20,7 +20,7 @@ CREATE TABLE Post(
     Numero_Commenti int not null, 
     Username_Utente char(30) not null,
     Data_Pubblicazione datetime not null,
-    FOREIGN KEY  (Username_Utente) REFERENCES Utente(Username),
+    FOREIGN KEY  (Username_Utente) REFERENCES Utente(Username) ON DELETE CASCADE,
     PRIMARY KEY(ID)
 );
 
@@ -30,7 +30,7 @@ CREATE TABLE Multimedia (
     Nome char(50) not null,
     Dimensione double not null,
     Tipo char(50) not null,
-    FOREIGN KEY (ID_Post) REFERENCES Post(ID),
+    FOREIGN KEY (ID_Post) REFERENCES Post(ID) ON DELETE CASCADE,
     PRIMARY KEY(ID_Post, Nome)
 );
 
@@ -40,8 +40,8 @@ CREATE TABLE Commento(
     Numero int not null,
     Contenuto tinytext not null,
     Username_Utente char(30) not null,
-	FOREIGN KEY (ID_Post) REFERENCES Post(ID),
-    FOREIGN KEY (Username_Utente) REFERENCES Utente(Username),
+	FOREIGN KEY (ID_Post) REFERENCES Post(ID) ON DELETE CASCADE,
+    FOREIGN KEY (Username_Utente) REFERENCES Utente(Username) ON DELETE CASCADE,
     PRIMARY KEY (ID_Post, Numero)
 );
 
@@ -57,8 +57,8 @@ CREATE TABLE Gruppo(
 CREATE TABLE Partecipazione (
 	Username_Utente char(30) not null,
 	Nome_Gruppo char(50) not null,
-	FOREIGN KEY (Username_Utente) REFERENCES Utente(Username),
-    FOREIGN KEY (Nome_Gruppo) REFERENCES Gruppo(Nome),
+	FOREIGN KEY (Username_Utente) REFERENCES Utente(Username) ON DELETE CASCADE,
+    FOREIGN KEY (Nome_Gruppo) REFERENCES Gruppo(Nome) ON DELETE CASCADE,
     PRIMARY KEY(Username_Utente, Nome_Gruppo)
 );
 
@@ -72,8 +72,8 @@ CREATE TABLE Argomento(
 CREATE TABLE Riguardare(
 	Nome_Gruppo char(50) not null,
 	Nome_Argomento char(40) not null,
-    FOREIGN KEY (Nome_Gruppo) REFERENCES Gruppo(Nome),
-    FOREIGN KEY (Nome_Argomento) REFERENCES Argomento(Nome)
+    FOREIGN KEY (Nome_Gruppo) REFERENCES Gruppo(Nome) ON DELETE CASCADE,
+    FOREIGN KEY (Nome_Argomento) REFERENCES Argomento(Nome) ON DELETE CASCADE
 );
 
 -- Azienda(P_IVA, Ragione_Sociale, Telefono);
@@ -91,7 +91,7 @@ CREATE TABLE Pagina(
     Categoria char(50) not null,
     Numero_Partecipanti int not null,
     PIVA_Azienda int not null,
-    FOREIGN KEY (PIVA_Azienda) REFERENCES Azienda(P_IVA),
+    FOREIGN KEY (PIVA_Azienda) REFERENCES Azienda(P_IVA) ON DELETE CASCADE,
     PRIMARY KEY (Nome)
 );
 
@@ -99,7 +99,7 @@ CREATE TABLE Pagina(
 CREATE TABLE Seguire(
     Username_Utente char(30) not null,
     Nome_Pagina char(50) not null,
-    FOREIGN KEY (Nome_Pagina) REFERENCES Pagina(Nome),
-    FOREIGN KEY (Username_Utente) REFERENCES Utente(Username),
+    FOREIGN KEY (Nome_Pagina) REFERENCES Pagina(Nome) ON DELETE CASCADE,
+    FOREIGN KEY (Username_Utente) REFERENCES Utente(Username) ON DELETE CASCADE,
     PRIMARY KEY (Username_Utente, Nome_Pagina)
 );

@@ -21,7 +21,6 @@ public class InsertUtentePanel extends JPanel {
         passwordField = new JTextField(20);
         dateField = new JTextField(20);
         nazioneField = new JTextField(20);
-        nazioneField.setToolTipText("Ciao");
 
         this.add(usernameLabel);
         this.add(usernameField);

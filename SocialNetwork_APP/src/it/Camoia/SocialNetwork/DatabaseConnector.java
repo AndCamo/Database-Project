@@ -37,7 +37,18 @@ public class DatabaseConnector {
                 + '"' + newUtente.getNome() + '"' + ',' + '"' + newUtente.getCognome() + '"' + ','
                 + '"' + newUtente.getDataDiNascita() + '"' + ',' + '"' + newUtente.getNazione() + '"' + ");";
         stmt.execute(query);
-        System.out.println("INSERIMENTO ESEGUITA"); //Stampa di controllo
+        System.out.println("INSERIMENTO ESEGUITO"); //Stampa di controllo
+    }
+
+    public final void editUtente(Utente utente) throws SQLException{
+        String query = "UPDATE Utente SET" + "\n" +
+                "Nome = " + '"' + utente.getNome() + '"' + ", Cognome = " + '"' + utente.getCognome() + '"' +
+                ", Nazionalita = " + '"' + utente.getNazione() + '"' + ", eMail = " + '"' + utente.geteMail() + '"' +
+                ", Access_Key = " + '"' + utente.getPassword() + '"' + ", Data_Di_Nascita = " + '"' + utente.getDataDiNascita() + '"' + "\n" +
+                "WHERE Username = " + '"' + utente.getUsername() + '"';
+        System.out.println(query);
+        stmt.execute(query);
+        System.out.println("MODIFICA ESEGUITA"); //Stampa di controllo
     }
 
     public final void removeValues(String username, String table) throws SQLException {

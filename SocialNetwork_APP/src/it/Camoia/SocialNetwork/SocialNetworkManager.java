@@ -53,6 +53,27 @@ public class SocialNetworkManager {
         dbConnector.closeConnection();
     }
 
+    public void modificaUtente(Utente newUtente) throws SQLException, BadUtenteException {
+        dbConnector.startConnection();
+        if (newUtente.checkUtente()) {
+            dbConnector.editUtente(newUtente);
+        } else {
+            throw new BadUtenteException();
+        }
+        dbConnector.closeConnection();
+    }
+
+    public Utente findUtente(String username) throws SQLException{
+        List<Utente> utenti = this.getUtenti();
+        Utente utenteToReturn = null;
+        for (Utente tmpUtente : utenti){
+            if (tmpUtente.getUsername().equals(username))
+                utenteToReturn = tmpUtente;
+        }
+
+        return utenteToReturn;
+    }
+
 
     DatabaseConnector dbConnector;
 

@@ -2,13 +2,11 @@ package it.Camoia.SocialNetwork.GUI;
 
 import it.Camoia.SocialNetwork.Entity.Utente;
 import it.Camoia.SocialNetwork.Exception.BadUtenteException;
-import it.Camoia.SocialNetwork.SocialNetworkManager;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,12 +15,13 @@ public class SocialNetworkFrame extends JFrame {
     public SocialNetworkFrame(){
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
-        this.add(createCenterPanel(), BorderLayout.SOUTH);
-        this.add(createTopPanel(), BorderLayout.CENTER);
+        this.add(createCenterPanel(), BorderLayout.CENTER);
+        this.add(createTopPanel(), BorderLayout.NORTH);
     }
 
     private JPanel createTopPanel(){
         topPanel = new JPanel();
+        topPanel.setBorder(new TitledBorder(new EtchedBorder(), "Utility"));
         printButton = new JButton("Stampa Utenti");
         printButton.setPreferredSize(new Dimension(150, 80));
         printButton.setFont(new Font("monospace", Font.BOLD, 15));
@@ -90,12 +89,12 @@ public class SocialNetworkFrame extends JFrame {
         deleteButton.setPreferredSize(new Dimension(150, 80));
         deleteButton.setFont(new Font("monospace", Font.BOLD, 15));
         deleteButton.addActionListener(listener -> {
-            DeleteUtentePanel deleteUtentePanel = null;
+            SelectUtentePanel selectUtentePanel = null;
             try {
-                deleteUtentePanel = new DeleteUtentePanel();
-                int result = JOptionPane.showConfirmDialog(SocialNetworkFrame.this, deleteUtentePanel, "Quale utente vuoi eliminare?", JOptionPane.OK_CANCEL_OPTION);
+                selectUtentePanel = new SelectUtentePanel();
+                int result = JOptionPane.showConfirmDialog(SocialNetworkFrame.this, selectUtentePanel, "Quale utente vuoi eliminare?", JOptionPane.OK_CANCEL_OPTION);
                 if (result == JOptionPane.OK_OPTION){
-                    String username = (String) deleteUtentePanel.utentiBox.getSelectedItem();
+                    String username = (String) selectUtentePanel.utentiBox.getSelectedItem();
                     SocialNetworkGUI.socialManager.removeUtente(username);
                 }
             } catch (SQLException e) {
@@ -103,9 +102,58 @@ public class SocialNetworkFrame extends JFrame {
             }
         });
 
+        modifyButton = new JButton("Modifica Utente");
+        modifyButton.setPreferredSize(new Dimension(150, 80));
+        modifyButton.setFont(new Font("monospace", Font.BOLD, 15));
+
+        modifyButton.addActionListener(listener -> {
+            try {
+                SelectUtentePanel selectUtentePanel = new SelectUtentePanel();
+                int result = JOptionPane.showConfirmDialog(SocialNetworkFrame.this, selectUtentePanel, "Quale utente vuoi modificare?", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION){
+                    String username = (String) selectUtentePanel.utentiBox.getSelectedItem();
+                    Utente utente = SocialNetworkGUI.socialManager.findUtente(username);
+                    InsertUtentePanel insertPanel = new InsertUtentePanel();
+                    insertPanel.usernameField.setText(utente.getUsername());
+                    insertPanel.usernameField.setEditable(false);
+                    insertPanel.nazioneField.setText(utente.getNazione());
+                    insertPanel.nomeField.setText(utente.getNome());
+                    insertPanel.cognomeField.setText(utente.getCognome());
+                    insertPanel.passwordField.setText(utente.getPassword());
+                    insertPanel.eMailField.setText(utente.geteMail());
+                    insertPanel.dateField.setText(utente.getDataDiNascita());
+                    int resultInsert = JOptionPane.showConfirmDialog(SocialNetworkFrame.this, insertPanel, "Modifica l'Utente: " + username, JOptionPane.OK_CANCEL_OPTION);
+                        if (resultInsert == JOptionPane.OK_OPTION){
+                            username = insertPanel.usernameField.getText();
+                            String nome = insertPanel.nomeField.getText();
+                            String cognome = insertPanel.cognomeField.getText();
+                            String eMail = insertPanel.eMailField.getText();
+                            String password = insertPanel.passwordField.getText();
+                            String nazione = insertPanel.nazioneField.getText();
+                            String data = insertPanel.dateField.getText();
+                            if (!data.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")){
+                                System.out.println("Ho letto: " + data);
+                                throw new IllegalArgumentException();
+                            }
+                            System.out.println(data);
+                            Utente tmpUtente = new Utente(username, nome, cognome, eMail, password, nazione, data);
+                            SocialNetworkGUI.socialManager.modificaUtente(tmpUtente);
+                        }
+                }
+            }catch (SQLException ex){
+                JOptionPane.showMessageDialog(this, "Errore durante la modifica", "Errore!", JOptionPane.ERROR_MESSAGE);
+            } catch (BadUtenteException ex) {
+                JOptionPane.showMessageDialog(this, "Errore parametri Utente!", "MODIFICA NON EFFETTUATA", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, "Formato data sbagliato, usare il seguente: \n YYYY-MM-DD", "MODIFICA NON EFFETTUATA", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+
         topPanel.add(printButton);
         topPanel.add(insertButton);
         topPanel.add(deleteButton);
+        topPanel.add(modifyButton);
         return topPanel;
     }
 
@@ -123,11 +171,13 @@ public class SocialNetworkFrame extends JFrame {
 
 
     protected JPanel topPanel;
+    protected JPanel centerPanel;
+    protected JPanel bottomPanel;
     protected JButton printButton;
     protected JButton insertButton;
+    protected JButton modifyButton;
 
     protected JButton deleteButton;
-    protected JPanel centerPanel;
     protected TextArea textArea;
     public static final int FRAME_WIDTH = 1420;
     public static final int FRAME_HEIGHT = 720;

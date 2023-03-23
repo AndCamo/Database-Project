@@ -37,6 +37,29 @@ public class SocialNetworkManager {
         return listUtenti;
     }
 
+    public List<Utente> getUtentiByNation(String nazioneUtente) throws SQLException {
+        dbConnector.startConnection();
+        String username, nome, cognome, eMail, password, nazione, dataDiNascita;
+        List<Utente> listUtenti = new ArrayList<>();
+        ResultSet resultSet = dbConnector.getUtentiByNation(nazioneUtente);
+
+        while (resultSet.next()){
+            username = resultSet.getString("Username");
+            nome = resultSet.getString("Nome");
+            cognome = resultSet.getString("Cognome");
+            eMail = resultSet.getString("eMail");
+            nazione= resultSet.getString("Nazionalita");
+            password = resultSet.getString("Access_Key");
+            dataDiNascita = resultSet.getString("Data_Di_Nascita");
+            Utente tmpUtente = new Utente(username, nome, cognome, eMail, password, nazione, dataDiNascita);
+            listUtenti.add(tmpUtente);
+        }
+
+        dbConnector.closeConnection();
+
+        return listUtenti;
+    }
+
     public void insertUtente(Utente newUtente) throws SQLException, BadUtenteException {
         dbConnector.startConnection();
         if (newUtente.checkUtente()) {

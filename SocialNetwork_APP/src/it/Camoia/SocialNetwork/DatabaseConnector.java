@@ -31,6 +31,17 @@ public class DatabaseConnector {
         return resultSet;
     }
 
+    public final ResultSet getUtentiByNation(String nazione){
+        ResultSet resultSet = null;
+        try{
+            resultSet = stmt.executeQuery("SELECT * FROM Utente WHERE Nazionalita = " + '"' + nazione + '"');
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("SELEZIONE ESEGUITA"); //Stampa di controllo
+        return resultSet;
+    }
+
     public final void insertValues(Utente newUtente) throws SQLException {
         String query = "INSERT INTO Utente VALUES " + "(" +
                 '"' + newUtente.getUsername() + '"' + ',' + '"' + newUtente.getPassword() + '"' + ',' + '"' + newUtente.geteMail() + '"' + ','

@@ -19,7 +19,6 @@ public class SelectUtentePanel extends JPanel {
         utentiList.forEach(utente -> usernameUtenti.add(utente.getUsername()));
         utentiBox = new JComboBox<String>();
         usernameUtenti.forEach(username -> utentiBox.addItem(username));
-
         this.add(choiseLabel);
         this.add(utentiBox);
     }

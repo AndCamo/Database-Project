@@ -17,6 +17,7 @@ public class SocialNetworkFrame extends JFrame {
 
         this.add(createCenterPanel(), BorderLayout.CENTER);
         this.add(createTopPanel(), BorderLayout.NORTH);
+        this.add(createBottomPanel(), BorderLayout.SOUTH);
     }
 
     private JPanel createTopPanel(){
@@ -28,22 +29,7 @@ public class SocialNetworkFrame extends JFrame {
         printButton.addActionListener(listener -> {
             try {
                 List<Utente> listaUtenti = SocialNetworkGUI.socialManager.getUtenti();
-                textArea.setText("");
-                textArea.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-                textArea.append(String.format("%-20s   \t%-12s   \t%-12s   \t%-20s   \t%-20s\t\t   %-25s   \t%-15s", "USERNAME", "NOME", "COGNOME", "PASSWORD", "E-MAIL", "NAZIONALITÀ", "DATA DI NASCITA"));
-                textArea.append("\n");
-                textArea.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-                //iterates over the list
-                for(Utente tmpUtente: listaUtenti)
-                {
-                    textArea.append(String.format("%-20s   \t%-12s   \t%-12s   \t%-20s   \t%-20s\t\t   %-25s   \t%-15s", tmpUtente.getUsername(), tmpUtente.getNome(), tmpUtente.getCognome(), tmpUtente.getPassword(), tmpUtente.geteMail(), tmpUtente.getNazione(), tmpUtente.getDataDiNascita()));
-                    textArea.append("\n");
-                }
-                textArea.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-                /*textArea.setText("--- STAMPO GLI UTENTI ---\n\n");
-                for (Utente tmpUtente : listaUtenti){
-                    textArea.append(tmpUtente.toString() + "\n");
-                }*/
+                updateTextArea(listaUtenti);
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Errore durante la stampa", "Errore!", JOptionPane.ERROR_MESSAGE);
             }
@@ -65,15 +51,9 @@ public class SocialNetworkFrame extends JFrame {
                 String nazione = insertUtentePanel.nazioneField.getText();
                 String data = insertUtentePanel.dateField.getText();
                 if (!data.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")){
-                    System.out.println("Ho letto: " + data);
                     throw new IllegalArgumentException();
                 }
-                System.out.println(data);
                 Utente tmpUtente = new Utente(username, nome, cognome, eMail, password, nazione, data);
-
-
-
-                System.out.println(tmpUtente.getDataDiNascita());
                 SocialNetworkGUI.socialManager.insertUtente(tmpUtente);
                 }catch (SQLException ex){
                     JOptionPane.showMessageDialog(this, "Errore durante l'inserimento", "Errore!", JOptionPane.ERROR_MESSAGE);
@@ -135,7 +115,6 @@ public class SocialNetworkFrame extends JFrame {
                                 System.out.println("Ho letto: " + data);
                                 throw new IllegalArgumentException();
                             }
-                            System.out.println(data);
                             Utente tmpUtente = new Utente(username, nome, cognome, eMail, password, nazione, data);
                             SocialNetworkGUI.socialManager.modificaUtente(tmpUtente);
                         }
@@ -149,11 +128,30 @@ public class SocialNetworkFrame extends JFrame {
             }
         });
 
+        filterButton = new JButton("Filtra Nazione");
+        filterButton.setPreferredSize(new Dimension(150, 80));
+        filterButton.setFont(new Font("monospace", Font.BOLD, 15));
+        filterButton.addActionListener(listener -> {
+            try {
+                SelectNationPanel selectNationPanel = new SelectNationPanel();
+                int result = JOptionPane.showConfirmDialog(SocialNetworkFrame.this, selectNationPanel, "Seleziona una Nazione", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION){
+                    String nazione = (String) selectNationPanel.nationBox.getSelectedItem();
+                    List<Utente> listaUtentiFiltered = SocialNetworkGUI.socialManager.getUtentiByNation(nazione);
+                    updateTextArea(listaUtentiFiltered);
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Errore durante la Stampa", "Errore!", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+
 
         topPanel.add(printButton);
         topPanel.add(insertButton);
         topPanel.add(deleteButton);
         topPanel.add(modifyButton);
+        topPanel.add(filterButton);
         return topPanel;
     }
 
@@ -167,6 +165,36 @@ public class SocialNetworkFrame extends JFrame {
         return centerPanel;
     }
 
+    public JPanel createBottomPanel(){
+        bottomPanel = new JPanel(new GridLayout(1,1));
+        JLabel creditLabel = new JLabel("Made with <3 by Andrea Camoia - 2023");
+        creditLabel.setHorizontalAlignment(JLabel.CENTER);
+        creditLabel.setPreferredSize(new Dimension(150, 40));
+        creditLabel.setFont(new Font("monospace", Font.BOLD, 14));
+        creditLabel.setBackground(Color.WHITE);
+        creditLabel.setOpaque(true);
+        bottomPanel.add(creditLabel);
+
+        return bottomPanel;
+    }
+
+
+
+    private void updateTextArea(List<Utente> listaUtenti){
+        textArea.setText("");
+        textArea.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        textArea.append(String.format("%-20s   \t%-12s   \t%-12s   \t%-20s   \t%-20s\t\t   %-25s   \t%-15s", "USERNAME", "NOME", "COGNOME", "PASSWORD", "E-MAIL", "NAZIONALITÀ", "DATA DI NASCITA"));
+        textArea.append("\n");
+        textArea.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        //iterates over the list
+        for(Utente tmpUtente: listaUtenti)
+        {
+            textArea.append(String.format("%-20s   \t%-12s   \t%-12s   \t%-20s   \t%-20s\t\t   %-25s   \t%-15s", tmpUtente.getUsername(), tmpUtente.getNome(), tmpUtente.getCognome(), tmpUtente.getPassword(), tmpUtente.geteMail(), tmpUtente.getNazione(), tmpUtente.getDataDiNascita()));
+            textArea.append("\n");
+        }
+        textArea.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    }
+
 
 
 
@@ -176,6 +204,7 @@ public class SocialNetworkFrame extends JFrame {
     protected JButton printButton;
     protected JButton insertButton;
     protected JButton modifyButton;
+    protected JButton filterButton;
 
     protected JButton deleteButton;
     protected TextArea textArea;

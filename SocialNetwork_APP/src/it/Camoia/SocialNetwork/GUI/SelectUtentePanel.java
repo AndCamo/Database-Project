@@ -17,6 +17,10 @@ public class SelectUtentePanel extends JPanel {
         List<Utente> utentiList = SocialNetworkGUI.socialManager.getUtenti();
         ArrayList<String> usernameUtenti = new ArrayList<>();
         utentiList.forEach(utente -> usernameUtenti.add(utente.getUsername()));
+
+        usernameUtenti.sort((utente1, utente2) -> {  //VISUALIZATION IN ALPHABETIC ORDER
+            return utente1.compareToIgnoreCase(utente2);
+        });
         utentiBox = new JComboBox<String>();
         usernameUtenti.forEach(username -> utentiBox.addItem(username));
         this.add(choiseLabel);

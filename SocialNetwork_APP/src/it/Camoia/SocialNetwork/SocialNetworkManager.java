@@ -85,7 +85,6 @@ public class SocialNetworkManager {
         }
         dbConnector.closeConnection();
     }
-
     public Utente findUtente(String username) throws SQLException{
         List<Utente> utenti = this.getUtenti();
         Utente utenteToReturn = null;
@@ -93,11 +92,8 @@ public class SocialNetworkManager {
             if (tmpUtente.getUsername().equals(username))
                 utenteToReturn = tmpUtente;
         }
-
         return utenteToReturn;
     }
-
-
     DatabaseConnector dbConnector;
 
 

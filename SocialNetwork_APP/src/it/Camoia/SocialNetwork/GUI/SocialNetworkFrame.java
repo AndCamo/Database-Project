@@ -167,7 +167,7 @@ public class SocialNetworkFrame extends JFrame {
 
     public JPanel createBottomPanel(){
         bottomPanel = new JPanel(new GridLayout(1,1));
-        JLabel creditLabel = new JLabel("Made with <3 by Andrea Camoia - 2023");
+        JLabel creditLabel = new JLabel("Made by Andrea Camoia - 2023");
         creditLabel.setHorizontalAlignment(JLabel.CENTER);
         creditLabel.setPreferredSize(new Dimension(150, 40));
         creditLabel.setFont(new Font("monospace", Font.BOLD, 14));
@@ -189,7 +189,8 @@ public class SocialNetworkFrame extends JFrame {
         //iterates over the list
         for(Utente tmpUtente: listaUtenti)
         {
-            textArea.append(String.format("%-20s   \t%-12s   \t%-12s   \t%-20s   \t%-20s\t\t   %-25s   \t%-15s", tmpUtente.getUsername(), tmpUtente.getNome(), tmpUtente.getCognome(), tmpUtente.getPassword(), tmpUtente.geteMail(), tmpUtente.getNazione(), tmpUtente.getDataDiNascita()));
+            textArea.append(String.format("%-20s   \t%-12s   \t%-12s   \t%-20s   \t%-20s\t\t   %-25s   \t%-15s",
+                    tmpUtente.getUsername(), tmpUtente.getNome(), tmpUtente.getCognome(), tmpUtente.getPassword(), tmpUtente.geteMail(), tmpUtente.getNazione(), tmpUtente.getDataDiNascita()));
             textArea.append("\n");
         }
         textArea.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
